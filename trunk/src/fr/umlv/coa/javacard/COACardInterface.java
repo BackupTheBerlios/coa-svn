@@ -30,7 +30,6 @@ import com.gemplus.tools.gemxpresso.GemXpressoService;
 import com.gemplus.tools.gemxpresso.util.GxpSystem;
 
 
-
 class COACardInterface
 {
 
@@ -71,11 +70,10 @@ class COACardInterface
 	private final List				listListener		= new ArrayList ();
 
 	private static COACardInterface	INSTANCE			= null;
-	
-	private final static byte		CARD_GET_NAME		= (byte)0xFF;
-	private final static byte		CARD_GET_INS		= (byte)0xFE;
-	private final static byte		CARD_GET_INS_NAME	= (byte)0xFD;
-	
+
+	private final static byte		CARD_GET_NAME		= (byte) 0xFF;
+	private final static byte		CARD_GET_INS		= (byte) 0xFE;
+	private final static byte		CARD_GET_INS_NAME	= (byte) 0xFD;
 
 	public COACardInterface ()
 	{
@@ -116,6 +114,8 @@ class COACardInterface
 
 	private void authentication ()
 	{
+		System.out.println ("Authentication ...");
+
 		keyFile = appKeyFile = keyFileDir + File.separator + cardKeyFile;
 
 		try
@@ -124,9 +124,9 @@ class COACardInterface
 		}
 		catch (Exception e2)
 		{
-			e2.printStackTrace();
+			e2.printStackTrace ();
 		}
-		
+
 		serv.setFullCrypto (true);
 
 		try
@@ -136,7 +136,7 @@ class COACardInterface
 		}
 		catch (GemXpressoException e1)
 		{
-			e1.printStackTrace();
+			e1.printStackTrace ();
 		}
 
 		try
@@ -145,9 +145,9 @@ class COACardInterface
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			e.printStackTrace ();
 		}
-		
+
 		VOPAuthenticationInput authenticationInput;
 		authenticationInput = new VOPAuthenticationInput ();
 
@@ -171,8 +171,10 @@ class COACardInterface
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			ex.printStackTrace ();
 		}
+
+		System.out.println ("Succeed.");
 	}
 
 	private void printAvailableTerminals ()
@@ -205,8 +207,10 @@ class COACardInterface
 
 	public void initListApplet ()
 	{
+		authentication ();
+
 		Enumeration en = null;
-		if(serv == null)
+		if (serv == null)
 		{
 			System.out.println ("Error service unavailable !!!§!§!§");
 			return;
@@ -214,6 +218,7 @@ class COACardInterface
 
 		try
 		{
+			System.out.println ("Listing Applets ...");
 			en = serv.scanCard ();
 		}
 		catch (Exception e)
@@ -221,18 +226,23 @@ class COACardInterface
 			e.printStackTrace ();
 		}
 
-		if(en != null)
-		while (en.hasMoreElements ())
-		{
-			CardObjectStatus cOS = (CardObjectStatus) en.nextElement ();
-			if (cOS.getCardObjectType () == CardObjectStatus.OBJECT_STATUS_ON_APPLICATION)
+		if (en != null)
+			while (en.hasMoreElements ())
 			{
-				//AppletCOA ap = new AppletCOA (cOS.getAID (), getAppletName(cOS.getAID()));
-				//makeAppletINSMap (ap);
-				//appletMap.put (cOS.getAID ().toString () , ap);
-				System.out.println (getAppletName(cOS.getAID()));
+				CardObjectStatus cOS = (CardObjectStatus) en.nextElement ();
+				if (cOS.getCardObjectType () == CardObjectStatus.OBJECT_STATUS_ON_APPLICATION)
+				{
+					String name = getAppletName (cOS.getAID ());
+					if (name != null)
+					{
+						System.out.println ("\"Introspection\" on " + name);
+
+						//AppletCOA ap = new AppletCOA (cOS.getAID (),
+						//makeAppletINSMap (ap);
+						//appletMap.put (cOS.getAID ().toString () , ap);
+					}
+				}
 			}
-		}
 		else
 			System.out.println ("No Applet on card");
 	}
@@ -291,7 +301,7 @@ class COACardInterface
 
 		return null;
 	}
-	
+
 	private String getAppletName (AppletID aid)
 	{
 		try
@@ -311,13 +321,13 @@ class COACardInterface
 
 			ResponseAPDU response = serv.sendAPDU (aidBuffer);
 
-			byte [] desc = response.getBuffer();
-			
+			byte [] desc = response.getBuffer ();
+
 			if ((desc.length < 2) || (desc [0] != 0x12) || (desc [1] != 0x03))
 				return null;
 
-			for (; desc [i] != (byte)0x90 && desc [i+1] != (byte)0x00 ; i++, j++)
-					tmpBuff [j] = desc [i];
+			for (; desc [i] != (byte) 0x90 && desc [i + 1] != (byte) 0x00; i++, j++)
+				tmpBuff [j] = desc [i];
 
 			return bytesToString (tmpBuff , (int) j);
 		}
@@ -336,7 +346,7 @@ class COACardInterface
 		this.slotId = slotId;
 
 		System.out.println ("Card Inserted !");
-		
+
 		initListApplet ();
 
 		fireCardInserted ();
@@ -345,7 +355,7 @@ class COACardInterface
 	public void cardRemoved ()
 	{
 		System.out.println ("Card Removed !");
-		
+
 		fireCardRemoved ();
 	}
 
@@ -358,7 +368,7 @@ class COACardInterface
 		}
 		catch (CardTerminalException e)
 		{
-			e.printStackTrace();
+			e.printStackTrace ();
 		}
 	}
 
@@ -371,7 +381,7 @@ class COACardInterface
 		}
 		catch (CardTerminalException e)
 		{
-			e.printStackTrace();
+			e.printStackTrace ();
 		}
 	}
 
@@ -390,7 +400,7 @@ class COACardInterface
 		EventGenerator.getGenerator ().addCTListener (new COAJavaCardListener ());
 
 		boolean stop = true;
-		
+
 		while (stop)
 		{
 
