@@ -12,6 +12,8 @@ package fr.umlv.coa.corba;
 
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.Policy;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.IdAssignmentPolicyValue;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
@@ -33,6 +35,16 @@ public final class COA
 	{
 		ORB orb  = ORB.init (args, null);
 		POA root = POAHelper.narrow (orb.resolve_initial_references ("RootPOA"));
+		NamingContextExt naming = null;
+		
+		try
+		{
+			naming = NamingContextExtHelper.narrow (orb.resolve_initial_references ("NameService"));
+		}
+		catch (Exception e)
+		{
+			naming = null;
+		}
 		
 		Policy[] policies = {root.create_id_assignment_policy (IdAssignmentPolicyValue.USER_ID)};
 		
@@ -40,7 +52,7 @@ public final class COA
 
 		root.the_POAManager ().activate ();
 
-		new CardCheckThread (orb, child);
+		new CardChecker (orb, child, naming);
 		
 		orb.run ();
 	}

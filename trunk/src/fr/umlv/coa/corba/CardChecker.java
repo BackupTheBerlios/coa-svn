@@ -25,6 +25,9 @@ import opencard.core.event.CardTerminalEvent;
 import opencard.core.terminal.CardTerminalException;
 
 import org.omg.CORBA.ORB;
+import org.omg.CORBA.Object;
+import org.omg.CosNaming.NameComponent;
+import org.omg.CosNaming.NamingContextExt;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.Servant;
 
@@ -36,7 +39,7 @@ import fr.umlv.coa.javacard.COACardInterface;
  * @author Ludo
  *
  */
-public final class CardCheckThread
+public final class CardChecker
 {
 	private static int COMPTEUR = 0;
 	
@@ -44,6 +47,9 @@ public final class CardCheckThread
 	private final ORB   orb;
 	/** The POA */
 	private final POA   poa;
+	
+	/** The naming context */
+	private final NamingContextExt naming;
 	
 	/** Map associating for a slot ID <-> a list of applets */
 	private final Map		 slots		  = new HashMap ();
@@ -54,13 +60,16 @@ public final class CardCheckThread
 	/**
 	 * Constructor
 	 * 
-	 * @param orb the initial orb 
-	 * @param poa the poa
+	 * @param orb 	 the initial orb 
+	 * @param poa 	 the poa
+	 * @param naming the naming context
 	 */
-	public CardCheckThread (ORB orb, POA poa)
+	public CardChecker (ORB orb, POA poa, NamingContextExt naming)
 	{
 		this.orb = orb;
 		this.poa = poa;
+		
+		this.naming = naming;
 		
 		System.out.println ("[COA Started]");
 		
@@ -77,25 +86,76 @@ public final class CardCheckThread
 	 * 
 	 * @param szName 	  the applet name
 	 * @param iCardNumber the card number 
-	 * @param szIOR 	  the IOR to export
+	 * @param object 	  the object to export
 	 * 
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	private void exportIOR (String szName, int iCardNumber, String szIOR) throws IOException
+	private void exportObject (String szName, int iCardNumber, Object object) throws Exception
 	{
-		String szFileNale = szName + iCardNumber + COAParameters.COA_IOR_FILE_SUFFIX;
+		exportObjectToFile (szName, iCardNumber, object);
+		
+		if (naming != null)
+			exportObjectToNamingService (szName, iCardNumber, object);
+	}
+	
+	/**
+	 * To export the IOR
+	 * 
+	 * @param szName 	  the applet name
+	 * @param iCardNumber the card number 
+	 * @param object 	  the object to export
+	 * 
+	 * @throws Exception 
+	 */
+	private void exportObjectToFile (String szName, int iCardNumber, Object object) throws Exception
+	{
+		String szFileName = szName + iCardNumber + COAParameters.COA_IOR_FILE_SUFFIX;
 		BufferedWriter bw = null;
 		
 		try
 		{
-			bw = new BufferedWriter (new FileWriter (szFileNale));
-			bw.write (szIOR);
+			bw = new BufferedWriter (new FileWriter (szFileName));
+			bw.write (orb.object_to_string (object));
 		}
 		finally
 		{
 			if (bw != null)
 				bw.close ();
 		}
+	}
+	
+	
+	/**
+	 * To export the IOR
+	 * 
+	 * @param szName 	  the applet name
+	 * @param iCardNumber the card number 
+	 * @param object 	  the object to export
+	 * 
+	 * @throws Exception 
+	 */
+	private void exportObjectToNamingService (String szName, int iCardNumber, Object object) throws Exception
+	{
+		String szRegistrationName = szName + iCardNumber;
+		
+		NameComponent [] name = naming.to_name (szRegistrationName);
+		naming.rebind (name, object);
+	}	
+	
+	/**
+	 * To unexport a registered objet
+	 * 
+	 * @param szName 	  the applet name
+	 * @param iCardNumber the card number 
+	 * 
+	 * @throws Exception 
+	 */
+	private void unexportObject (String szName, int iCardNumber) throws Exception
+	{
+		unexportOnFile (szName, iCardNumber);
+		
+		if (naming != null)
+			unexportOnNamingContext (szName, iCardNumber);
 	}
 	
 	
@@ -107,7 +167,7 @@ public final class CardCheckThread
 	 * 
 	 * @throws IOException 
 	 */
-	private void unexportIOR (String szName, int iCardNumber) throws IOException
+	private void unexportOnFile (String szName, int iCardNumber) throws IOException
 	{
 		String szFileName = szName + iCardNumber + COAParameters.COA_IOR_FILE_SUFFIX;
 		
@@ -115,6 +175,20 @@ public final class CardCheckThread
 		f.delete ();
 	}	
 	
+	/**
+	 * To unexport an IOR reference
+	 * 
+	 * @param szName 	  the applet name
+	 * @param iCardNumber the card number 
+	 * 
+	 * @throws Exception 
+	 */
+	private void unexportOnNamingContext (String szName, int iCardNumber) throws Exception
+	{
+		String szRegistrationName = szName + iCardNumber;
+		
+		naming.unbind (naming.to_name (szRegistrationName));
+	}	
 	
 	/**
 	 * To generate the servant ID
@@ -176,7 +250,7 @@ public final class CardCheckThread
 					
 					poa.activate_object_with_id (oid, servant);
 					
-					exportIOR (szName, slotID.intValue (), orb.object_to_string (poa.id_to_reference (oid)));
+					exportObject (szName, slotID.intValue (), poa.id_to_reference (oid));
 					
 					list.add (new ServantNameOID (oid, szName));
 				}
@@ -214,7 +288,7 @@ public final class CardCheckThread
 					
 					poa.deactivate_object (s.oid);
 					
-					unexportIOR (s.szName, slotID.intValue ());
+					unexportObject (s.szName, slotID.intValue ());
 				}
 				catch (Exception e)
 				{
