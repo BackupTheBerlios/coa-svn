@@ -77,6 +77,9 @@ public final class CardServant extends Servant implements InvokeHandler
 			input.read (arg, 0, arg.length);
 			
 			byte [] res = COACardInterface.getInstance ().invoke (applet.getName (), method, arg);
+
+			if (res == null)
+				return null;
 			
 			//byte [] 	 res = "toto".getBytes ();
 			
