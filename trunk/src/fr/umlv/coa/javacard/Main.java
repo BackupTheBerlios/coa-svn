@@ -20,6 +20,15 @@ public class Main
 	{
 		COACardInterface i = COACardInterface.getInstance();
 		
-		i.init();		
+		i.init();	
+		
+		boolean stop = false;
+		
+		while (!stop)
+		{
+			
+		}
+		
+		i.stop();
 	}
 }

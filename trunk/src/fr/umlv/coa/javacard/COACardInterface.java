@@ -95,7 +95,7 @@ class COACardInterface
 		return listListener.remove (l);
 	}
 
-	public void initOCF ()
+	private void initOCF ()
 	{
 		try
 		{
@@ -190,7 +190,7 @@ class COACardInterface
 		}
 	}
 
-	public void stopOCF ()
+	private void stopOCF ()
 	{
 		try
 		{
@@ -203,7 +203,7 @@ class COACardInterface
 		}
 	}
 
-	public void initListApplet ()
+	private void initListApplet ()
 	{
 		authentication ();
 
@@ -430,14 +430,10 @@ class COACardInterface
 		initOCF ();
 
 		EventGenerator.getGenerator ().addCTListener (new COAJavaCardListener ());
-
-		boolean stop = true;
-
-		while (stop)
-		{
-
-		}
-
+	}
+	
+	public void stop()
+	{
 		stopOCF ();
 
 		System.out.println ("COACardInterface stoped");
