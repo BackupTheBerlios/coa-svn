@@ -9,8 +9,6 @@
 	<classpathentry kind="lib" path="lib/reference-services.jar"/>
 	<classpathentry kind="lib" path="lib/reference-terminals-windows.jar"/>
 	<classpathentry kind="lib" path="lib/rejar-tool.jar"/>
-	<classpathentry kind="lib" path="lib/sb-demo.jar"/>
-	<classpathentry kind="lib" path="lib/sb-demo-ext.jar"/>
 	<classpathentry kind="lib" path="lib/base-core.jar"/>
 	<classpathentry kind="lib" path="lib/base-opt.jar"/>
 	<classpathentry kind="lib" path="lib/apduio.jar"/>
@@ -38,5 +36,8 @@
 	<classpathentry kind="lib" path="lib/gxputil.jar"/>
 	<classpathentry kind="lib" path="lib/pcsc_wrapper.jar"/>
 	<classpathentry kind="lib" path="lib/gemxpresso.jar"/>
+	<classpathentry kind="src" path="generated"/>
+	<classpathentry kind="lib" path="lib/idl.jar"/>
+	<classpathentry kind="lib" path="lib/logkit-1.2.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
