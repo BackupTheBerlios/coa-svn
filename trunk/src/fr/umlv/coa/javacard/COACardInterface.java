@@ -457,7 +457,7 @@ class COACardInterface
 		return new String (c);
 	}
 	
-	public byte[] invoke (String appletName, String instructionName)
+	public byte[] invoke (String appletName, String instructionName, byte [] arg)
 	{
 		if((appletMap == null)||(serv == null))
 			return null;
@@ -472,7 +472,11 @@ class COACardInterface
 		if(instructionByte == (byte)0xFF)
 			return null;
 		
-		byte [] aidBuffer = new byte [5];
+		byte lengthArg = 0;
+		if(arg != null)
+			lengthArg = (byte)arg.length;
+		
+		byte [] aidBuffer = new byte [5+lengthArg];
 
 		try
 		{
@@ -488,8 +492,11 @@ class COACardInterface
 		aidBuffer [1] = instructionByte;
 		aidBuffer [2] = (byte) 0x00;
 		aidBuffer [3] = (byte) 0x00;
-		aidBuffer [4] = (byte) 0x00;
+		aidBuffer [4] = (byte) lengthArg;
 
+		if(lengthArg != 0)
+			System.arraycopy(arg, 0, aidBuffer, 5, lengthArg);
+		
 		ResponseAPDU response = null;
 		
 		try
