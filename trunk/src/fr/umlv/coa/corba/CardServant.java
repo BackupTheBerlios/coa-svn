@@ -12,8 +12,6 @@ package fr.umlv.coa.corba;
 
 import java.io.IOException;
 
-import opencard.core.util.HexString;
-
 import org.omg.CORBA.SystemException;
 import org.omg.CORBA.portable.InputStream;
 import org.omg.CORBA.portable.InvokeHandler;
@@ -22,8 +20,9 @@ import org.omg.CORBA.portable.ResponseHandler;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.Servant;
 
-import fr.umlv.coa.javacard.AppletCOA;
-import fr.umlv.coa.javacard.COACardInterface;
+import fr.umlv.coa.javacard.CardApplet;
+import fr.umlv.coa.terminal.CardTerminalInterface;
+import fr.umlv.coa.terminal.gemplus.GemplusCardTerminalInterface;
 
 
 /**
@@ -35,12 +34,14 @@ import fr.umlv.coa.javacard.COACardInterface;
 public final class CardServant extends Servant implements InvokeHandler
 {
 	/** The IDS prefix */
-	private static final String IDS_PREFIX = "IDL:" + COAParameters.COA_MODULE_NAME + "/";
+	private static final String IDS_PREFIX = "IDL:" + CardServantParameters.MODULE_NAME + "/";
 	/** The IDS suffix */
 	private static final String IDS_SUFFIX = ":1.0";
 	
 	/** The card applet */
-	private final AppletCOA applet;
+	private final CardApplet applet;
+	/** The card terminal interface */
+	private final CardTerminalInterface terminal;
 	
 	//----------------------------------------------------------//
 	//------------------- CONSTRUCTORS -------------------------//
@@ -50,10 +51,12 @@ public final class CardServant extends Servant implements InvokeHandler
 	 * Constructor with the applet
 	 * 
 	 * @param applet the applet
+	 * @param terminal the card terminal interface
 	 */
-	public CardServant (AppletCOA applet)
+	public CardServant (CardApplet applet, CardTerminalInterface terminal)
 	{
 		this.applet = applet;
+		this.terminal = terminal;
 	}
 	
 	//----------------------------------------------------------//
@@ -74,26 +77,16 @@ public final class CardServant extends Servant implements InvokeHandler
 
 		try
 		{
-			System.out.println ("TAILLE INPUT : " + input.available ());
-			
-			// Construction de l'argument
+			//FIXME Regler la recuperation des arguments
 			byte [] arg = new byte [input.available ()];
-			//arg [0] = input.read_octet ();
-			//input.read_octet_array (arg, 0, arg.length);
 			
-			//System.out.println ("AFFICHAGE DE L ARG");
-			//System.out.println (HexString.hexify(arg));
-			
-			byte [] ret = new byte [256];
-			byte [] res = COACardInterface.getInstance ().invoke (applet.getName (), method, arg);
+			// Appel de la methode et Recuperation du resultat
+			byte [] res = terminal.invoke (applet.getName (), method, arg);
 
-			if (res == null)
-				return null;
-			
 			if (res == null)
 				return out;
 			
-			System.arraycopy (res, 0, ret, 0, res.length);
+			/*System.arraycopy (res, 0, ret, 0, res.length);
 			
 			//byte [] 	 res = "toto".getBytes ();
 			
@@ -102,7 +95,7 @@ public final class CardServant extends Servant implements InvokeHandler
 			//for (int i = 0; i < res.length; ++i)
 				//out.write_octet (res [i]);
 			
-			//out.write_string (new String (res));
+			//out.write_string (new String (res));*/
 		}
 		catch (IOException e)
 		{
@@ -120,10 +113,10 @@ public final class CardServant extends Servant implements InvokeHandler
 	{
 		String szID = new String (objectId);
 		
-		if (!szID.startsWith (COAParameters.COA_MODULE_NAME + COAParameters.COA_ID_DELIMITER))
+		if (!szID.startsWith (CardServantParameters.MODULE_NAME + CardServantParameters.ID_DELIMITER))
 			return null;
 		
-		int iIndex  = (COAParameters.COA_MODULE_NAME + COAParameters.COA_ID_DELIMITER).length ();
+		int iIndex  = (CardServantParameters.MODULE_NAME + CardServantParameters.ID_DELIMITER).length ();
 		
 		// Recuperation du nom
 		String szName = szID.substring (iIndex);
