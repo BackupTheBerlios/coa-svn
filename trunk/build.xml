@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project default="release">
+
+	<property environment="env" />
+	<property name="coa.dir" value="." />
+
+	<property name="src.dir" value="${coa.dir}/src" />
+	<property name="test.dir" value="${coa.dir}/test" />
+	<property name="classes.dir" value="${coa.dir}/classesAnt" />
+	<property name="lib.dir" value="${coa.dir}/lib" />
+	<property name="bin.dir" value="${coa.dir}/bin" />
+	<property name="javadoc.dir" value="${coa.dir}/docs/api" />
+	<property name="classpath" value="${lib.dir}" />
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+
+		<javac destdir="${classes.dir}" source="1.5">
+			<src path="${src.dir}" />
+
+			<classpath>
+				<pathelement path="${classes.dir}" />
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<javac destdir="${classes.dir}" source="1.5">
+			<src path="${test.dir}" />
+
+			<classpath>
+				<pathelement path="${classes.dir}" />
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="release" depends="compile">
+		<mkdir dir="${bin.dir}" />
+		<copy todir="${bin.dir}/lib">
+			<fileset dir="lib"/>
+		</copy>
+			
+		<!-- Client -->
+		<copy todir="${bin.dir}">
+			<fileset dir="${src.dir}">
+			    <include name="client.xml"/>
+			</fileset>
+		</copy>
+		<jar destfile="${bin.dir}/coa.jar" basedir="${classes.dir}" includes="fr/umlv/coa/**">
+			<manifest>
+				<!-- DEFINE THE MAIN CLASS -->
+				<attribute name="Main-Class" value="fr.umlv.coa" />
+				<attribute name="Class-Path" value="${classpath}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${classes.dir}" />
+		<delete file="${bin.dir}/*.jar" />
+	</target>
+
+	<target name="javadoc" depends="compile">
+			<mkdir dir="${javadoc.dir}" />
+		
+	        <javadoc destdir="${javadoc.dir}"
+	        	access="private"
+	        	use="true"
+	        	notree="false" 
+	        	nonavbar="false"
+	        	noindex="false" 
+	        	splitindex="true" 
+	        	author="false" 
+	        	version="false"
+	            nodeprecatedlist="false" 
+	        	nodeprecated="false"
+	            packagenames="fr.umlv.coa.*"
+	            sourcepath="${src.dir}" 
+	        	classpath="${lib.dir}"
+				doctitle="COA"/>
+		</target>
+</project>
