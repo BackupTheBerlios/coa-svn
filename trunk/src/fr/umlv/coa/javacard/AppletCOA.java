@@ -7,25 +7,24 @@ import opencard.opt.applet.AppletID;
 
 
 /**
- * 
- * @author Leny
- *
  */
 public final class AppletCOA
 {
 	/** The applet ID */
-	private AppletID aid;
-	private Map		 mapINS	= new HashMap ();
-	
+	private AppletID	aid;
+	private Map			mapINS	= new HashMap ();
+	private String		name;
+
 	/**
 	 * @param aid
 	 */
-	public AppletCOA (AppletID aid)
+	public AppletCOA (AppletID aid, String name)
 	{
 		super ();
 		this.aid = aid;
+		this.name = name;
 	}
-	
+
 	/**
 	 * @return Returns the aid.
 	 */
@@ -33,7 +32,7 @@ public final class AppletCOA
 	{
 		return aid;
 	}
-	
+
 	/**
 	 * @return Returns the listINS.
 	 */
@@ -41,8 +40,7 @@ public final class AppletCOA
 	{
 		return mapINS;
 	}
-	
-	
+
 	/**
 	 * @param name
 	 * @return
@@ -51,8 +49,7 @@ public final class AppletCOA
 	{
 		return ((Byte) mapINS.get (name)).byteValue ();
 	}
-	
-	
+
 	/**
 	 * @param number
 	 * @param name
@@ -60,5 +57,10 @@ public final class AppletCOA
 	public void addINS (byte number, String name)
 	{
 		mapINS.put (name , new Byte (number));
+	}
+		
+	public String getName ()
+	{
+		return name;
 	}
 }
