@@ -1,17 +1,11 @@
 package org.sorbet.PortableServer; 
 /**Sorbet version 2.5*/ 
  
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-import java.util.*; 
-import org.sorbet.CORBA.Object; 
-import org.sorbet.CORBA.portable.ObjectImpl; 
-import org.sorbet.CORBA.SystemException; 
-import org.sorbet.CORBA.ORB; 
-import org.sorbet.CORBA.IIOP.Connexion;
+import java.util.Hashtable;
 
-import fr.umlv.coa.CardApplet;
-import fr.umlv.coa.CardProxyHandler;
+import org.sorbet.CORBA.ORB;
+import org.sorbet.CORBA.Object;
+import org.sorbet.CORBA.IIOP.Connexion;
  
 /** 
 * Cette classe fournit toutes les opérations et structures relatives au POA 
@@ -39,7 +33,7 @@ public class POAImpl implements POA, org.sorbet.CORBA.Object
 */ 
     public POAImpl() 
     { 
-        this.the_name = "RootPOA"; 
+    	this.the_name = "RootPOA"; 
         this.the_parent = null; 
         this.the_POAManager = null; 
         idtoServant = new Hashtable(); 
@@ -54,7 +48,7 @@ public class POAImpl implements POA, org.sorbet.CORBA.Object
 */ 
      public POAImpl(ORB orb) 
     { 
-        this.the_name = "RootPOA"; 
+     	this.the_name = "RootPOA"; 
         this.the_parent = null; 
         this.the_POAManager = null; 
         idtoServant = new Hashtable(); 
@@ -99,27 +93,10 @@ public class POAImpl implements POA, org.sorbet.CORBA.Object
 */ 
     public byte[] activate_object(Servant p_servant) throws ServantAlreadyActive, WrongPolicy 
     { 
-		Servant tmp = p_servant;
-		
-		System.out.println ("ACTIVATE OBJECT");
-		
-		if (tmp instanceof CardApplet && ((CardApplet) tmp).isOnCard ())
-		{
-			System.out.println ("CARD APPLET");
-			
-			InvocationHandler handler = new CardProxyHandler (); 
-			
-			// Create Remote Proxy
-			//tmp = (Servant) Proxy.newProxyInstance (tmp.getClass ().getClassLoader (), new Class [] {tmp.getClass ().getInterfaces () [0]}, handler);
-		}
-
-    	
-    	
-    	
     	byte[] oid = getCompteur(); 
-    	tmp.set_thread_policy(get_thread_policy()); 
+    	p_servant.set_thread_policy(get_thread_policy()); 
 /*	Combine : on enregistre oid sous forme de string */ 
-        idtoServant.put(new String(oid), tmp); 
+        idtoServant.put(new String(oid), p_servant); 
  
         return oid; 
     } 

@@ -16,6 +16,9 @@ package fr.umlv.coa.javacard;
 public class Main
 {
 
+	/**
+	 * @param args
+	 */
 	public static void main (String [] args)
 	{
 		COACardInterface i = COACardInterface.getInstance();

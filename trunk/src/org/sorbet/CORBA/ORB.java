@@ -1,13 +1,16 @@
 package org.sorbet.CORBA; 
  
-import java.util.Hashtable; 
-import java.lang.String; 
-import org.sorbet.CORBA.IIOP.*; 
-import org.sorbet.CORBA.IIOP.threading.*; 
-import org.sorbet.CORBA.GIOP.*; 
-import org.sorbet.CORBA.IOP.*; 
-import org.sorbet.CORBA.portable.*; 
-import org.sorbet.PortableServer.*; 
+import java.util.Hashtable;
+
+import org.sorbet.CORBA.GIOP.RequestHeader_1_0;
+import org.sorbet.CORBA.IIOP.Connexion;
+import org.sorbet.CORBA.IIOP.ConnexionFactory;
+import org.sorbet.CORBA.IIOP.Serveur;
+import org.sorbet.CORBA.IIOP.threading.InitiationDispatcher;
+import org.sorbet.CORBA.IOP.IOR;
+import org.sorbet.CORBA.IOP.ServiceContext;
+import org.sorbet.CORBA.IOP.TaggedProfile;
+import org.sorbet.PortableServer.POA;
 /**
 * Cette classe fournit toutes les opérations et structures relatives à l'ORB
 * @author Equipe ORB&POA&Millo Jean-vivien
@@ -53,8 +56,9 @@ public class ORB extends ORBLoader
 	    } 
 	catch(java.net.UnknownHostException e){e.printStackTrace();}
 
-        org.sorbet.PortableServer.POA rootPOA = new org.sorbet.PortableServer.POAImpl( this ); 
-        initRef.put("RootPOA",rootPOA); 
+    
+	org.sorbet.PortableServer.POA rootPOA = new org.sorbet.PortableServer.POAImpl( this ); 
+    initRef.put("RootPOA",rootPOA); 
 	 
     } 
  
@@ -91,7 +95,7 @@ public class ORB extends ORBLoader
         } 
  
 		// affectation des références initiales 
-        org.sorbet.PortableServer.POA rootPOA = new  org.sorbet.PortableServer.POAImpl( this ); 
+		org.sorbet.PortableServer.POA rootPOA = new org.sorbet.PortableServer.POAImpl( this ); 
         initRef.put("RootPOA",rootPOA); 
  
         // affectation des references initiales personnalisées 

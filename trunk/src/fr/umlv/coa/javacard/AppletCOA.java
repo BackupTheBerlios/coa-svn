@@ -7,6 +7,8 @@ import opencard.opt.applet.AppletID;
 
 
 /**
+ * Applet COA
+ * 
  */
 public final class AppletCOA
 {
