@@ -20,9 +20,10 @@ import org.omg.CORBA.portable.ResponseHandler;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.Servant;
 
+import fr.umlv.coa.javacard.AppletInstruction;
 import fr.umlv.coa.javacard.CardApplet;
 import fr.umlv.coa.terminal.CardTerminalInterface;
-import fr.umlv.coa.terminal.gemplus.GemplusCardTerminalInterface;
+import fr.umlv.coa.util.Convert;
 
 
 /**
@@ -83,19 +84,38 @@ public final class CardServant extends Servant implements InvokeHandler
 			// Appel de la methode et Recuperation du resultat
 			byte [] res = terminal.invoke (applet.getName (), method, arg);
 
-			if (res == null)
+			if (res == null || res.length == 0)
 				return out;
+
+			// Recuperation du type de retour
+			byte bINS	= applet.getINS (method);
 			
-			/*System.arraycopy (res, 0, ret, 0, res.length);
-			
-			//byte [] 	 res = "toto".getBytes ();
-			
-			out.write_octet_array (ret, 0, ret.length);
-			
-			//for (int i = 0; i < res.length; ++i)
-				//out.write_octet (res [i]);
-			
-			//out.write_string (new String (res));*/
+			switch (bINS)
+			{
+				case AppletInstruction.BYTE_RETURN:
+					out.write_octet (res [0]);
+					break;
+					
+				case AppletInstruction.SHORT_RETURN:
+					out.write_short (Convert.bytesToShort (res, 0));
+					break;
+					
+				case AppletInstruction.INT_RETURN:
+				case AppletInstruction.LONG_RETURN:
+					out.write_long (Convert.bytesToInt (res, 0));
+					break;
+					
+				case AppletInstruction.STRING_RETURN:
+					out.write_string (Convert.bytesToString (res, 0));
+					break;
+					
+				case AppletInstruction.ARRAY_RETURN:
+					// TODO
+					break;
+					
+				case AppletInstruction.VOID_RETURN:
+					break;
+			}			
 		}
 		catch (IOException e)
 		{

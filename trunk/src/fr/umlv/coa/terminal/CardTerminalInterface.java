@@ -17,22 +17,6 @@ import java.util.Map;
  */
 public interface CardTerminalInterface
 {
-	/** Applet byte return type */
-	public static final byte		BYTE_APPLET			= 0;
-	/** Applet short return type */
-	public static final byte		SHORT_APPLET		= 1;
-	/** Applet integer return type */
-	public static final byte		INT_APPLET			= 2;
-	/** Applet long return type */
-	public static final byte		LONG_APPLET			= 3;
-	/** Applet string return type */
-	public static final byte		STRING_APPLET		= 4;
-	/** Applet array return type */
-	public static final byte		ARRAY_APPLET		= 5;
-	/** Applet void return type */
-	public static final byte		VOID_APPLET			= 6;
-
-		
 	/**
 	 * To initialize the card terminal
 	 * 
