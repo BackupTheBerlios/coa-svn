@@ -1,0 +1,8 @@
+module test
+{
+	interface MonApplet
+	{
+		string getName ();
+		short  getNumber ();
+	};
+};
