@@ -41,7 +41,7 @@ public class MonApplet extends Applet
 	private final static byte [] INS_GET_NUMBER_DESC = {(byte)'g', (byte)'e',(byte)'t',(byte)'N',(byte)'u',(byte)'m',(byte)'b',(byte)'e',(byte)'r'};
 	private final static byte [] INS_TYPE = {4, 1, 0, 6};
 	private final static byte [] NAME = {(byte)'M', (byte)'o', (byte)'n', (byte)'A', (byte)'p', (byte)'p', (byte)'l', (byte)'e', (byte)'t' };
-	private byte arg = (byte)0;
+	private byte arg = (byte)12;
 	
 	//----------------------------------------------------------//
 	//------------------- CONSTRUCTORS -------------------------//
@@ -193,14 +193,16 @@ public class MonApplet extends Applet
 	private void setArg (APDU apdu)
 	{
 		byte [] apduBuffer = apdu.getBuffer ();
+
+		apdu.setIncomingAndReceive();
 		
 		arg = apduBuffer[5];
 		
 		apdu.setOutgoing ();
 		
-		apdu.setOutgoingLength ((short) 0);
+		apdu.setOutgoingLength ((short) 1);
 		
-		apdu.sendBytes ((short) 5 , (short) 0);
+		apdu.sendBytes ((short) 5 , (short) 1);
 	}
 	
 	/**

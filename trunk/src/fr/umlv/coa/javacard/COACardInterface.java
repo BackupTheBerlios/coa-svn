@@ -212,9 +212,10 @@ public final class COACardInterface
 		
 		if (arg != null)
 		{
-			lengthArg = (byte)arg.length;
+			lengthArg = (byte)(arg.length+1);
 			aidBuffer = new byte [5+lengthArg];
-			System.arraycopy(arg, 0, aidBuffer, 5, lengthArg);
+			System.arraycopy(arg, 0, aidBuffer, 5, lengthArg-1);
+			aidBuffer[5+lengthArg-1] = 0;
 		}
 		else
 		{
