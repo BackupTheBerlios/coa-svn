@@ -236,10 +236,9 @@ class COACardInterface
 					if (name != null)
 					{
 						System.out.println ("\"Introspection\" on " + name);
-
-						//AppletCOA ap = new AppletCOA (cOS.getAID (),
-						//makeAppletINSMap (ap);
-						//appletMap.put (cOS.getAID ().toString () , ap);
+						AppletCOA ap = new AppletCOA (cOS.getAID (), name);
+						makeAppletINSMap (ap);
+						appletMap.put (cOS.getAID ().toString () , ap);
 					}
 				}
 			}
@@ -257,21 +256,15 @@ class COACardInterface
 
 		while (desc [i] != (byte) 0x90 && desc [i + 1] != (byte) 0x0)
 		{
-			byte [] tmpBuff = new byte [256];
-			String insName = null;
-			byte ins = 0;
-			int j = 0;
+			byte instructionByte = desc[i];
+			
+			String instructionName = getInstructionName(applet.getAid(), instructionByte);
+			
+			System.out.println ("\t Found "+instructionName + " - "+instructionByte);
 
-			for (j = 0; desc [i] != 00; i++, j++)
-				tmpBuff [j] = desc [i];
-
-			ins = desc [++i];
-
+			applet.addINS (instructionByte , instructionName);
+			
 			i++;
-
-			insName = bytesToString (tmpBuff , (int) j);
-
-			applet.addINS (ins , insName);
 		}
 	}
 
@@ -284,7 +277,7 @@ class COACardInterface
 			serv.select (aid);
 
 			aidBuffer [0] = aid.getBytes () [0];
-			aidBuffer [1] = (byte) 0xFF;
+			aidBuffer [1] = CARD_GET_INS;
 			aidBuffer [2] = (byte) 0x00;
 			aidBuffer [3] = (byte) 0x00;
 			aidBuffer [4] = (byte) 0x00;
@@ -339,6 +332,43 @@ class COACardInterface
 		return null;
 	}
 
+	private String getInstructionName (AppletID aid, byte instructionByte)
+	{
+		try
+		{
+			byte [] aidBuffer = new byte [5];
+			byte [] tmpBuff = new byte [256];
+			int i = 2, j = 0;
+			String appletName = null;
+
+			//serv.select (aid);
+
+			aidBuffer [0] = aid.getBytes () [0];
+			aidBuffer [1] = CARD_GET_INS_NAME;
+			aidBuffer [2] = instructionByte;
+			aidBuffer [3] = (byte) 0x00;
+			aidBuffer [4] = (byte) 0x00;
+
+			ResponseAPDU response = serv.sendAPDU (aidBuffer);
+
+			byte [] desc = response.getBuffer ();
+
+			if ((desc.length < 2) || (desc [0] != 0x12) || (desc [1] != 0x03))
+				return null;
+
+			for (; desc [i] != (byte) 0x90 && desc [i + 1] != (byte) 0x00; i++, j++)
+				tmpBuff [j] = desc [i];
+
+			return bytesToString (tmpBuff , (int) j);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace ();
+		}
+
+		return null;
+	}
+	
 	public void cardInserted (SmartCard card, CardTerminal terminal, int slotId)
 	{
 		this.card = card;
