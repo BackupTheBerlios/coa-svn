@@ -12,6 +12,8 @@ package fr.umlv.coa.corba;
 
 import java.io.IOException;
 
+import opencard.core.util.HexString;
+
 import org.omg.CORBA.SystemException;
 import org.omg.CORBA.portable.InputStream;
 import org.omg.CORBA.portable.InvokeHandler;
@@ -72,21 +74,35 @@ public final class CardServant extends Servant implements InvokeHandler
 
 		try
 		{
+			System.out.println ("TAILLE INPUT : " + input.available ());
+			
 			// Construction de l'argument
 			byte [] arg = new byte [input.available ()];
-			input.read (arg, 0, arg.length);
+			//arg [0] = input.read_octet ();
+			//input.read_octet_array (arg, 0, arg.length);
 			
+			//System.out.println ("AFFICHAGE DE L ARG");
+			//System.out.println (HexString.hexify(arg));
+			
+			byte [] ret = new byte [256];
 			byte [] res = COACardInterface.getInstance ().invoke (applet.getName (), method, arg);
 
 			if (res == null)
 				return null;
 			
+			if (res == null)
+				return out;
+			
+			System.arraycopy (res, 0, ret, 0, res.length);
+			
 			//byte [] 	 res = "toto".getBytes ();
 			
-			/*for (int i = 0; i < res.length; ++i)
-				out.write_octet (res [i]);*/
+			out.write_octet_array (ret, 0, ret.length);
 			
-			out.write_string (new String (res));
+			//for (int i = 0; i < res.length; ++i)
+				//out.write_octet (res [i]);
+			
+			//out.write_string (new String (res));
 		}
 		catch (IOException e)
 		{

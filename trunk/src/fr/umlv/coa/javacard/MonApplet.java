@@ -27,14 +27,19 @@ public class MonApplet extends Applet
 	private final static byte GET_NAME = (byte) 0xFF;
 	private final static byte INS_GET_NAME = (byte) 0x13;
 	private final static byte INS_GET_NUMBER = (byte) 0x14;
+	private final static byte INS_GET_ARG = (byte) 0x15;
+	private final static byte INS_SET_ARG = (byte) 0x16;
 	private final static byte INS_DESC = (byte) 0xFD;
 	private final static byte INS_LIST_INS = (byte) 0xFE;
 	private final static byte [] DESC_OK = {(byte)0x12, (byte)0x03};
 	private final static byte [] DESC_NOK = {(byte)0x12, (byte)0x04};
-	private final static byte [] LIST_INS = {(byte)INS_GET_NAME, (byte)INS_GET_NUMBER};	
+	private final static byte [] LIST_INS = {(byte)INS_GET_NAME, (byte)INS_GET_NUMBER, (byte)INS_GET_ARG, (byte)INS_SET_ARG};	
 	private final static byte [] INS_GET_NAME_DESC = {(byte)'g', (byte)'e',(byte)'t',(byte)'N',(byte)'a',(byte)'m',(byte)'e'};
+	private final static byte [] INS_GET_ARG_DESC = {(byte)'g', (byte)'e',(byte)'t',(byte)'A',(byte)'r',(byte)'g'};
+	private final static byte [] INS_SET_ARG_DESC = {(byte)'s', (byte)'e',(byte)'t',(byte)'A',(byte)'r',(byte)'g'};
 	private final static byte [] INS_GET_NUMBER_DESC = {(byte)'g', (byte)'e',(byte)'t',(byte)'N',(byte)'u',(byte)'m',(byte)'b',(byte)'e',(byte)'r'};
 	private final static byte [] NAME = {(byte)'M', (byte)'o', (byte)'n', (byte)'A', (byte)'p', (byte)'p', (byte)'l', (byte)'e', (byte)'t' };
+	private byte arg = (byte)0;
 	
 	//----------------------------------------------------------//
 	//------------------- CONSTRUCTORS -------------------------//
@@ -94,6 +99,13 @@ public class MonApplet extends Applet
 				case INS_GET_NUMBER :
 					getNumber (arg0);
 					break;
+				case INS_GET_ARG :
+					getArg (arg0);
+					break;
+				case INS_SET_ARG :
+					setArg (arg0);
+					break;
+					
 				default :
 					ISOException.throwIt (ISO7816.SW_INS_NOT_SUPPORTED);
 			}
@@ -154,6 +166,38 @@ public class MonApplet extends Applet
 		
 		apdu.sendBytes ((short) 5 , (short) 2);
 	}
+
+	/**
+	 * @param apdu
+	 */
+	private void getArg (APDU apdu)
+	{
+		byte [] apduBuffer = apdu.getBuffer ();
+		
+		apduBuffer [5] = arg;
+		
+		apdu.setOutgoing ();
+		
+		apdu.setOutgoingLength ((short) 1);
+		
+		apdu.sendBytes ((short) 5 , (short) 1);
+	}
+	
+	/**
+	 * @param apdu
+	 */
+	private void setArg (APDU apdu)
+	{
+		byte [] apduBuffer = apdu.getBuffer ();
+		
+		arg = apduBuffer[5];
+		
+		apdu.setOutgoing ();
+		
+		apdu.setOutgoingLength ((short) 0);
+		
+		apdu.sendBytes ((short) 5 , (short) 0);
+	}
 	
 	/**
 	 * @param apdu
@@ -186,6 +230,12 @@ public class MonApplet extends Applet
 				break;
 			case INS_GET_NUMBER :
 				sendInsDesc (apdu , INS_GET_NUMBER_DESC , true);
+				break;
+			case INS_GET_ARG :
+				sendInsDesc (apdu , INS_GET_ARG_DESC, true);
+				break;
+			case INS_SET_ARG :
+				sendInsDesc (apdu , INS_SET_ARG_DESC, true);
 				break;
 			default :
 				sendInsDesc (apdu , null , false);
