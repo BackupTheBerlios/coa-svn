@@ -47,7 +47,12 @@ public final class AppletCOA
 	 */
 	public byte getINS (String name)
 	{
-		return ((Byte) mapINS.get (name)).byteValue ();
+		Byte insByte = (Byte) mapINS.get (name);
+		
+		if(insByte==null)
+			return (byte)0xFF;
+		
+		return insByte.byteValue ();
 	}
 
 	/**

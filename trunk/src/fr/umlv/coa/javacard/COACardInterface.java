@@ -14,10 +14,12 @@ import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CardTerminalRegistry;
 import opencard.core.terminal.ResponseAPDU;
+import opencard.core.util.HexString;
 import opencard.opt.applet.AppletID;
 
 import com.gemplus.opencard.service.op.CardObjectStatus;
 import com.gemplus.opencard.service.op.CardServiceOPCore;
+import com.gemplus.opencard.service.op.CardServiceOPException;
 import com.gemplus.opencard.service.op.Result;
 import com.gemplus.opencard.service.op.vop.VOPAuthenticationInput;
 import com.gemplus.opencard.service.op.vop.vop211.CardServiceVOP211;
@@ -234,7 +236,7 @@ class COACardInterface
 						System.out.println ("\"Introspection\" on " + name);
 						AppletCOA ap = new AppletCOA (cOS.getAID (), name);
 						makeAppletINSMap (ap);
-						appletMap.put (cOS.getAID ().toString () , ap);
+						appletMap.put (name , ap);
 					}
 				}
 			}
@@ -446,5 +448,56 @@ class COACardInterface
 			c [i] = n;
 		}
 		return new String (c);
+	}
+	
+	public byte[] invoke (String appletName, String instructionName)
+	{
+		if((appletMap == null)||(serv == null))
+			return null;
+		
+		AppletCOA applet = (AppletCOA)appletMap.get(appletName);
+		
+		if(applet == null)
+			return null;
+		
+		byte instructionByte = applet.getINS(instructionName);
+		
+		if(instructionByte == (byte)0xFF)
+			return null;
+		
+		byte [] aidBuffer = new byte [5];
+
+		try
+		{
+			System.out.println ("Selecting "+applet.getName());
+			serv.select(applet.getAid());
+		}
+		catch (Exception e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		aidBuffer [0] = applet.getAid().getBytes () [0];
+		aidBuffer [1] = instructionByte;
+		aidBuffer [2] = (byte) 0x00;
+		aidBuffer [3] = (byte) 0x00;
+		aidBuffer [4] = (byte) 0x00;
+
+		ResponseAPDU response = null;
+		
+		try
+		{
+			System.out.println ("Executing "+instructionName);
+			response = serv.sendAPDU (aidBuffer);
+		}
+		catch (CardTerminalException e)
+		{
+			e.printStackTrace();
+		}
+
+		if(response != null)
+			return response.getBuffer();
+		
+		return null;
 	}
 }
