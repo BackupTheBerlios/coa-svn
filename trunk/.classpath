@@ -3,5 +3,40 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="lib/gemplus-terminals.jar"/>
+	<classpathentry kind="lib" path="lib/migterminals.jar"/>
+	<classpathentry kind="lib" path="lib/pcsc-wrapper-src.jar"/>
+	<classpathentry kind="lib" path="lib/reference-services.jar"/>
+	<classpathentry kind="lib" path="lib/reference-terminals-windows.jar"/>
+	<classpathentry kind="lib" path="lib/rejar-tool.jar"/>
+	<classpathentry kind="lib" path="lib/sb-demo.jar"/>
+	<classpathentry kind="lib" path="lib/sb-demo-ext.jar"/>
+	<classpathentry kind="lib" path="lib/base-core.jar"/>
+	<classpathentry kind="lib" path="lib/base-opt.jar"/>
+	<classpathentry kind="lib" path="lib/apduio.jar"/>
+	<classpathentry kind="lib" path="lib/apdutool.jar"/>
+	<classpathentry kind="lib" path="lib/api21.jar"/>
+	<classpathentry kind="lib" path="lib/capdump.jar"/>
+	<classpathentry kind="lib" path="lib/converter.jar"/>
+	<classpathentry kind="lib" path="lib/jcwde.jar"/>
+	<classpathentry kind="lib" path="lib/offcardverifier.jar"/>
+	<classpathentry kind="lib" path="lib/scriptgen.jar"/>
+	<classpathentry kind="lib" path="lib/vopcardservice.jar"/>
+	<classpathentry kind="lib" path="lib/cryptix-gemxpresso.jar"/>
+	<classpathentry kind="lib" path="lib/cryptix-gemxpresso-is.jar"/>
+	<classpathentry kind="lib" path="lib/gemplus-rad-terminals.jar"/>
+	<classpathentry kind="lib" path="lib/gemplus-util.jar"/>
+	<classpathentry kind="lib" path="lib/gemxpresso-filemanager.jar"/>
+	<classpathentry kind="lib" path="lib/cmdgxp211_pk.jar"/>
+	<classpathentry kind="lib" path="lib/cmdgxp211v1.jar"/>
+	<classpathentry kind="lib" path="lib/cmdgxp211v2.jar"/>
+	<classpathentry kind="lib" path="lib/cryptix-jce-api.jar"/>
+	<classpathentry kind="lib" path="lib/gcf2gxcfconverter.jar"/>
+	<classpathentry kind="lib" path="lib/gsecardservice.jar"/>
+	<classpathentry kind="lib" path="lib/gxpconverter.jar"/>
+	<classpathentry kind="lib" path="lib/gxpproject.jar"/>
+	<classpathentry kind="lib" path="lib/gxputil.jar"/>
+	<classpathentry kind="lib" path="lib/pcsc_wrapper.jar"/>
+	<classpathentry kind="lib" path="lib/gemxpresso.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
