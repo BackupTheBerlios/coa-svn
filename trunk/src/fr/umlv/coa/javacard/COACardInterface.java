@@ -472,11 +472,18 @@ class COACardInterface
 		if(instructionByte == (byte)0xFF)
 			return null;
 		
+		byte [] aidBuffer;
 		byte lengthArg = 0;
 		if(arg != null)
+		{
 			lengthArg = (byte)arg.length;
-		
-		byte [] aidBuffer = new byte [5+lengthArg];
+			aidBuffer = new byte [5+lengthArg];
+			System.arraycopy(arg, 0, aidBuffer, 5, lengthArg);
+		}
+		else
+		{
+			aidBuffer = new byte [5];
+		}
 
 		try
 		{
@@ -494,8 +501,6 @@ class COACardInterface
 		aidBuffer [3] = (byte) 0x00;
 		aidBuffer [4] = (byte) lengthArg;
 
-		if(lengthArg != 0)
-			System.arraycopy(arg, 0, aidBuffer, 5, lengthArg);
 		
 		ResponseAPDU response = null;
 		
