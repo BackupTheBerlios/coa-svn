@@ -11,7 +11,6 @@
 package fr.umlv.coa.javacard;
 
 /**
- * @author Administrateur
  *
  */
 public class Main

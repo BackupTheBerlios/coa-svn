@@ -9,19 +9,15 @@ import java.util.TreeMap;
 
 import opencard.core.event.CTListener;
 import opencard.core.event.EventGenerator;
-import opencard.core.service.CardRequest;
-import opencard.core.service.CardServiceException;
 import opencard.core.service.SmartCard;
 import opencard.core.terminal.CardTerminal;
 import opencard.core.terminal.CardTerminalException;
 import opencard.core.terminal.CardTerminalRegistry;
-import opencard.core.terminal.CommandAPDU;
 import opencard.core.terminal.ResponseAPDU;
 import opencard.opt.applet.AppletID;
 
 import com.gemplus.opencard.service.op.CardObjectStatus;
 import com.gemplus.opencard.service.op.CardServiceOPCore;
-import com.gemplus.opencard.service.op.CardServiceOPException;
 import com.gemplus.opencard.service.op.Result;
 import com.gemplus.opencard.service.op.vop.VOPAuthenticationInput;
 import com.gemplus.opencard.service.op.vop.vop211.CardServiceVOP211;
@@ -340,8 +336,6 @@ class COACardInterface
 			byte [] tmpBuff = new byte [256];
 			int i = 2, j = 0;
 			String appletName = null;
-
-			//serv.select (aid);
 
 			aidBuffer [0] = aid.getBytes () [0];
 			aidBuffer [1] = CARD_GET_INS_NAME;
