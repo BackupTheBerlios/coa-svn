@@ -30,6 +30,7 @@ public class MonApplet extends Applet
 	private final static byte INS_GET_ARG = (byte) 0x15;
 	private final static byte INS_SET_ARG = (byte) 0x16;
 	private final static byte INS_DESC = (byte) 0xFD;
+	private final static byte INS_RETRUN_TYPE = (byte) 0xFC;
 	private final static byte INS_LIST_INS = (byte) 0xFE;
 	private final static byte [] DESC_OK = {(byte)0x12, (byte)0x03};
 	private final static byte [] DESC_NOK = {(byte)0x12, (byte)0x04};
@@ -38,6 +39,7 @@ public class MonApplet extends Applet
 	private final static byte [] INS_GET_ARG_DESC = {(byte)'g', (byte)'e',(byte)'t',(byte)'A',(byte)'r',(byte)'g'};
 	private final static byte [] INS_SET_ARG_DESC = {(byte)'s', (byte)'e',(byte)'t',(byte)'A',(byte)'r',(byte)'g'};
 	private final static byte [] INS_GET_NUMBER_DESC = {(byte)'g', (byte)'e',(byte)'t',(byte)'N',(byte)'u',(byte)'m',(byte)'b',(byte)'e',(byte)'r'};
+	private final static byte [] INS_TYPE = {4, 1, 0, 6};
 	private final static byte [] NAME = {(byte)'M', (byte)'o', (byte)'n', (byte)'A', (byte)'p', (byte)'p', (byte)'l', (byte)'e', (byte)'t' };
 	private byte arg = (byte)0;
 	
@@ -105,7 +107,9 @@ public class MonApplet extends Applet
 				case INS_SET_ARG :
 					setArg (arg0);
 					break;
-					
+				case INS_RETRUN_TYPE :
+					sendReturnType (arg0);
+					break;					
 				default :
 					ISOException.throwIt (ISO7816.SW_INS_NOT_SUPPORTED);
 			}
@@ -257,6 +261,20 @@ public class MonApplet extends Applet
 		apdu.setOutgoingLength ((short) (2 + LIST_INS.length));
 		
 		apdu.sendBytes ((short) 0 , (short) (2 + LIST_INS.length));
+	}
+	
+	private void sendReturnType (APDU apdu)
+	{
+		byte [] buffer = apdu.getBuffer ();
+		
+		Util.arrayCopy (DESC_OK , (short) 0 , buffer , (short) 0 , (short) 2);
+		Util.arrayCopy (INS_TYPE , (short) 0 , buffer , (short) 2 ,
+				(short) INS_TYPE.length);
+		
+		apdu.setOutgoing ();
+		apdu.setOutgoingLength ((short) (2 + INS_TYPE.length));
+		
+		apdu.sendBytes ((short) 0 , (short) (2 + INS_TYPE.length));
 	}
 	
 	/**

@@ -47,7 +47,7 @@ import com.gemplus.tools.gemxpresso.util.GxpSystem;
 public final class COACardInterface
 {
 	/** The opencard home directory */ 
-	private static final String	HOME_DIR 	= "c:" + File.separator + "gemplus" + File.separator + "gemxpresso.rad3";
+	private static final String	HOME_DIR 	= "c:\\gemplus\\gemxpresso.rad3";
 	/** The card reader */
 	private static final String	CARD_TARGET	= "gempc410_com1";
 	/** The card profile name */
@@ -61,6 +61,9 @@ public final class COACardInterface
 	private final static byte		CARD_GET_INS		= (byte) 0xFE;
 	/** The card get instruction name */
 	private final static byte		CARD_GET_INS_NAME	= (byte) 0xFD;
+	/** The card get instruction return type */
+	private final static byte		CARD_GET_INS_TYPE	= (byte) 0xFC;
+	
 	
 	/** The Singleton instance */
 	private static COACardInterface	INSTANCE = null;
@@ -107,6 +110,15 @@ public final class COACardInterface
 	/** The application key index */
 	private int						appKeyIndex			= 0;
 
+	/** Applet return Values */
+	private static final byte		BYTE_APPLET			= 0;
+	private static final byte		SHORT_APPLET		= 1;
+	private static final byte		INT_APPLET			= 2;
+	private static final byte		LONG_APPLET			= 3;
+	private static final byte		STRING_APPLET		= 4;
+	private static final byte		ARRAY_APPLET		= 5;
+	private static final byte		VOID_APPLET			= 6;
+	
 	
 	//----------------------------------------------------------//
 	//--------------------- CONSTRUCTORS -----------------------//
@@ -474,6 +486,7 @@ public final class COACardInterface
 	private void buildAppletINSMap (AppletCOA applet)
 	{
 		byte [] desc = getAppletDescription (applet.getAid ());
+		byte [] type = getAppletReturnType(applet.getAid());
 		int i = 2;
 
 		if ((desc.length < 2) || (desc [0] != 0x12) || (desc [1] != 0x03))
@@ -485,9 +498,36 @@ public final class COACardInterface
 			
 			String instructionName = getInstructionName(applet.getAid(), instructionByte);
 			
-			System.out.println ("\t Found "+instructionName + " - "+instructionByte);
+			String tmpType = "";
+			
+			switch(type[i])
+			{
+				case BYTE_APPLET:
+					tmpType = "byte";
+					break;
+				case SHORT_APPLET:
+					tmpType = "short";
+					break;
+				case INT_APPLET:
+					tmpType = "int";
+					break;
+				case LONG_APPLET:
+					tmpType = "long";
+					break;
+				case STRING_APPLET:
+					tmpType = "String";
+					break;
+				case ARRAY_APPLET:
+					tmpType = "byte []";
+					break;
+				case VOID_APPLET:
+					tmpType = "void";
+					break;
+			}
+			
+			System.out.println ("\t Found : "+tmpType+" "+instructionName + " - "+instructionByte);
 
-			applet.addINS (instructionByte , instructionName);
+			applet.addINS (instructionByte , new AppletInstruction(instructionName, type[i]));
 			
 			i++;
 		}
@@ -526,6 +566,39 @@ public final class COACardInterface
 		return null;
 	}
 
+	/**
+	 * To get an applet instructions return type
+	 * 
+	 * @param aid the applet ID
+	 * @return the applet description byte array
+	 */
+	private byte [] getAppletReturnType (AppletID aid)
+	{
+		try
+		{
+			byte [] aidBuffer = new byte [5];
+
+			serv.select (aid);
+
+			aidBuffer [0] = aid.getBytes () [0];
+			aidBuffer [1] = CARD_GET_INS_TYPE;
+			aidBuffer [2] = (byte) 0x00;
+			aidBuffer [3] = (byte) 0x00;
+			aidBuffer [4] = (byte) 0x00;
+
+			ResponseAPDU response = serv.sendAPDU (aidBuffer);
+
+			return response.getBuffer ();
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace ();
+		}
+
+		return null;
+	}
+	
 	/**
 	 * To get the applet name
 	 * 

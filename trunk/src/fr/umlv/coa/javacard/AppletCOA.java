@@ -1,6 +1,7 @@
 package fr.umlv.coa.javacard;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import opencard.opt.applet.AppletID;
@@ -50,21 +51,30 @@ public final class AppletCOA
 	 */
 	public byte getINS (String name)
 	{
-		Byte insByte = (Byte) mapINS.get (name);
+		byte insByte = -1;
 		
-		if(insByte==null)
+		for(Iterator i = mapINS.keySet().iterator(); i.hasNext();)
+		{
+			AppletInstruction ins = (AppletInstruction)i.next();
+			if(ins.getName().equals(name))
+			{
+				insByte = ins.getReturnType();
+			}
+		}
+		
+		if(insByte==-1)
 			return (byte)0xFF;
 		
-		return insByte.byteValue ();
+		return insByte;
 	}
 
 	/**
 	 * @param number
 	 * @param name
 	 */
-	public void addINS (byte number, String name)
+	public void addINS (byte number, AppletInstruction ins)
 	{
-		mapINS.put (name , new Byte (number));
+		mapINS.put (ins , new Byte (number));
 	}
 		
 	/**
