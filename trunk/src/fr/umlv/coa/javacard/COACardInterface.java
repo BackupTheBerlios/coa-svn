@@ -382,6 +382,12 @@ class COACardInterface
 	{
 		System.out.println ("Card Removed !");
 
+		card = null;
+		terminal = null;
+		slotId = 0;
+		
+		appletMap.clear();
+		
 		fireCardRemoved ();
 	}
 
