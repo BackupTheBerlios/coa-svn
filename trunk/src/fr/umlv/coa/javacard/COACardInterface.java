@@ -110,6 +110,11 @@ class COACardInterface
 		}
 	}
 
+	public TreeMap getAppletMap ()
+	{
+		return appletMap;
+	}
+	
 	private void authentication ()
 	{
 		System.out.println ("Authentication ...");
