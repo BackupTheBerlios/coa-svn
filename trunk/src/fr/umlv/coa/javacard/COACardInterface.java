@@ -47,7 +47,7 @@ import com.gemplus.tools.gemxpresso.util.GxpSystem;
 public final class COACardInterface
 {
 	/** The opencard home directory */ 
-	private static final String	HOME_DIR 	= "d:" + File.separator + "gemplus" + File.separator + "gemxpresso.rad3";
+	private static final String	HOME_DIR 	= "c:" + File.separator + "gemplus" + File.separator + "gemxpresso.rad3";
 	/** The card reader */
 	private static final String	CARD_TARGET	= "gempc410_com1";
 	/** The card profile name */
@@ -243,7 +243,7 @@ public final class COACardInterface
 			
 			if(buffer.length>=2)
 			{
-				if((buffer[buffer.length-1]!=(byte)0x00)||(buffer[buffer.length-2]!=(byte)0x90)
+				if((buffer[buffer.length-1]!=(byte)0x00)||(buffer[buffer.length-2]!=(byte)0x90))
 				{
 					return null;
 				}
