@@ -1,4 +1,4 @@
-package fr.umlv.coa;
+package fr.umlv.coa.javacard;
 
 import javacard.framework.APDU;
 import javacard.framework.Applet;

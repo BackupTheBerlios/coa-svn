@@ -1,4 +1,4 @@
-package fr.umlv.coa;
+package fr.umlv.coa.javacard;
 
 import java.io.File;
 import java.util.Enumeration;
