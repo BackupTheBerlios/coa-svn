@@ -238,8 +238,25 @@ public final class COACardInterface
 		}
 
 		if (response != null)
-			return response.getBuffer();
-		
+		{
+			byte [] buffer = response.getBuffer();
+			
+			if(buffer.length>=2)
+			{
+				if((buffer[buffer.length-1]!=(byte)0x00)||(buffer[buffer.length-2]!=(byte)0x90)
+				{
+					return null;
+				}
+				else
+				{ 	
+					byte [] tmpBuff = new byte[buffer.length-2];
+						
+					System.arraycopy(buffer, 0, tmpBuff, 0, buffer.length-2);
+					
+					return tmpBuff;
+				}
+			}
+		}
 		return null;
 	}
 		
