@@ -10,7 +10,6 @@
 
 package fr.umlv.coa.corba;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.omg.CORBA.SystemException;

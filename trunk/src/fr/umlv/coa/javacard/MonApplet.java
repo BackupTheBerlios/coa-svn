@@ -41,6 +41,9 @@ public class MonApplet extends Applet
 	//----------------------------------------------------------//
 
 	/**
+	 * @param buffer 
+	 * @param offset 
+	 * @param length 
 	 * 
 	 */
 	public MonApplet (byte [] buffer, short offset, byte length)

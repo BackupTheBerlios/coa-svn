@@ -27,6 +27,7 @@ public final class COA
 	 * The main entry
 	 * 
 	 * @param args the program arguments
+	 * @throws Exception 
 	 */
 	public static void main (String [] args) throws Exception
 	{

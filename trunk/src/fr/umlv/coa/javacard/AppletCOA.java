@@ -19,6 +19,7 @@ public final class AppletCOA
 
 	/**
 	 * @param aid
+	 * @param name 
 	 */
 	public AppletCOA (AppletID aid, String name)
 	{
@@ -45,7 +46,7 @@ public final class AppletCOA
 
 	/**
 	 * @param name
-	 * @return
+	 * @return the instruction value
 	 */
 	public byte getINS (String name)
 	{
@@ -66,6 +67,9 @@ public final class AppletCOA
 		mapINS.put (name , new Byte (number));
 	}
 		
+	/**
+	 * @return the applet name
+	 */
 	public String getName ()
 	{
 		return name;
