@@ -111,13 +111,13 @@ public final class COACardInterface
 	private int						appKeyIndex			= 0;
 
 	/** Applet return Values */
-	private static final byte		BYTE_APPLET			= 0;
-	private static final byte		SHORT_APPLET		= 1;
-	private static final byte		INT_APPLET			= 2;
-	private static final byte		LONG_APPLET			= 3;
-	private static final byte		STRING_APPLET		= 4;
-	private static final byte		ARRAY_APPLET		= 5;
-	private static final byte		VOID_APPLET			= 6;
+	public static final byte		BYTE_APPLET			= 0;
+	public static final byte		SHORT_APPLET		= 1;
+	public static final byte		INT_APPLET			= 2;
+	public static final byte		LONG_APPLET			= 3;
+	public static final byte		STRING_APPLET		= 4;
+	public static final byte		ARRAY_APPLET		= 5;
+	public static final byte		VOID_APPLET			= 6;
 	
 	
 	//----------------------------------------------------------//
