@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/vopcardservice.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/base-core.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/base-opt.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/capdump.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/cmdgxp211_pk.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/cmdgxp211v1.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/cmdgxp211v2.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/cryptix-gemxpresso.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/cryptix-gemxpresso-is.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/cryptix-jce-api.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gcf2gxcfconverter.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gemplus-rad-terminals.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gemplus-terminals.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gemplus-util.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gemxpresso.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gemxpresso-filemanager.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gsecardservice.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gse-gui.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gxpconverter.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gxpproject.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gxpradplugin-core.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/gxputil.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/jhall.jar"/>
+	<classpathentry kind="lib" path="C:/Gemplus/GemXpresso.rad3/lib/pcsc_wrapper.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

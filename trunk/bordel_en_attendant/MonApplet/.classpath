@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/lib/comm.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/lib/dt.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/lib/tools.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/lib/ext/comm.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/jre/lib/i18n.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/jre/lib/jaws.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/jre/lib/plugprov.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/jre/lib/rt.jar"/>
+	<classpathentry kind="lib" path="C:/jdk1.2.2/lib/javacardframework.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
